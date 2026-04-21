@@ -1,0 +1,570 @@
+/*
+  Challenging chess!!! -- main component styles.
+  Dark navy theme with warm gold accents.
+*/
+
+.app {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+.app-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.app-header h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  background: linear-gradient(180deg, var(--gold-strong) 0%, var(--gold) 60%, #a98420 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.02em;
+}
+
+.app-header .tagline {
+  color: var(--text-muted);
+  margin-top: 6px;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Thin gold accent bar under the title */
+.app-header h1::after {
+  content: '';
+  display: block;
+  width: 72px;
+  height: 2px;
+  margin: 12px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  border-radius: 2px;
+}
+
+/* ── Main layout ────────────────────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.chess-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0) 40%);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background-color: var(--bg-raised);
+}
+
+/* ── Difficulty selector ────────────────────────────────── */
+
+.difficulty-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.difficulty-card {
+  flex: 1 1 150px;
+  min-width: 140px;
+  min-height: 92px;
+  padding: 14px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08)),
+    var(--bg-elevated);
+  color: var(--text);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    background 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.difficulty-card:hover:not(:disabled) {
+  background-color: var(--bg-hover);
+  border-color: var(--gold-soft);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.difficulty-card.is-selected {
+  background: linear-gradient(180deg, var(--gold-strong), var(--gold));
+  color: #1a1206;
+  border-color: var(--gold-strong);
+  box-shadow:
+    0 0 0 1px var(--gold-strong),
+    0 6px 20px rgba(212, 175, 55, 0.3);
+}
+
+.difficulty-card.is-locked {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(220,205,160,0.06),
+    rgba(220,205,160,0.06) 8px,
+    rgba(220,205,160,0.02) 8px,
+    rgba(220,205,160,0.02) 16px
+  );
+  color: var(--text-dim);
+  cursor: not-allowed;
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.difficulty-label {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.difficulty-description {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  opacity: 0.78;
+  padding: 0 4px;
+}
+
+.lock-pill {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--crimson);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* ── Board ──────────────────────────────────────────────── */
+
+.board-wrapper {
+  width: 100%;
+  max-width: 580px;
+  box-sizing: border-box;
+  position: relative;
+  border-radius: var(--radius);
+  padding: 14px;
+  background: linear-gradient(180deg, #3a2a18, #1d140a);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.4) inset,
+    0 20px 50px rgba(0,0,0,0.5);
+  /* No aspect-ratio here. The chessboard inside already renders as a
+     perfect square, and the wrapper sizes itself to fit (+ padding).
+     Using aspect-ratio here double-constrained the layout and caused
+     the board to overflow the bottom of the frame. */
+}
+
+.board-wrapper > [id^='challenging-chess-board'] {
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+}
+
+/* ── Status line ────────────────────────────────────────── */
+
+.status-line {
+  min-height: 1.5em;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
+
+.status-line.tone-warn { color: var(--amber); border-color: rgba(224,163,59,0.35); background: rgba(224,163,59,0.08); }
+.status-line.tone-win  { color: var(--emerald); border-color: rgba(58,162,114,0.35); background: rgba(58,162,114,0.08); }
+.status-line.tone-lose { color: var(--crimson); border-color: rgba(210,68,63,0.35); background: rgba(210,68,63,0.08); }
+.status-line.tone-draw { color: var(--text); border-color: var(--border-strong); background: rgba(255,255,255,0.04); }
+
+/* ── Toolbar (Restart + Sound) ──────────────────────────── */
+
+.game-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.restart-button,
+.sound-toggle {
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.restart-button:hover,
+.sound-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--gold-soft);
+  transform: translateY(-1px);
+}
+
+.sound-toggle.is-off {
+  color: var(--text-dim);
+}
+
+.sound-toggle-label {
+  font-size: 0.9rem;
+}
+
+.restart-button.is-primary {
+  background: linear-gradient(180deg, var(--gold-strong), var(--gold));
+  color: #1a1206;
+  border-color: var(--gold-strong);
+  font-weight: 600;
+  padding: 12px 22px;
+  font-size: 1rem;
+}
+
+.restart-button.is-primary:hover {
+  background: linear-gradient(180deg, #f1d072, var(--gold-strong));
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25);
+}
+
+/* ── CHECK!!! banner ────────────────────────────────────── */
+/* Centered on the board. Flashes a few times then fades out. */
+
+.check-warning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 16px 24px;
+  border-radius: var(--radius);
+  background: #ffe000;
+  border: 4px solid #000;
+  box-shadow:
+    0 0 0 4px #ffe000,
+    0 0 0 8px #000,
+    0 14px 40px rgba(255, 224, 0, 0.45),
+    0 0 60px rgba(255, 224, 0, 0.35);
+  font-family: var(--font-body);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #000;
+  z-index: 20;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: check-flash 2.5s ease-in-out forwards;
+  transform-origin: center center;
+}
+
+.check-warning-text {
+  font-size: 1.9rem;
+  display: inline-block;
+}
+
+@keyframes check-flash {
+  /* Pop in */
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  8%   { opacity: 1; transform: translate(-50%, -50%) scale(1.18); }
+  14%  { transform: translate(-50%, -50%) scale(1); }
+  /* Rapid pulses */
+  22%  { transform: translate(-50%, -50%) scale(1.1); }
+  30%  { transform: translate(-50%, -50%) scale(1); }
+  38%  { transform: translate(-50%, -50%) scale(1.1); }
+  46%  { transform: translate(-50%, -50%) scale(1); }
+  54%  { transform: translate(-50%, -50%) scale(1.1); }
+  62%  { transform: translate(-50%, -50%) scale(1); }
+  /* Hold briefly, then fade out */
+  80%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+/* ── Game over overlay ──────────────────────────────────── */
+
+.game-over-overlay {
+  position: absolute;
+  inset: 14px; /* sit inside the board's inner frame */
+  background: rgba(7, 12, 22, 0.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 10;
+  animation: fade-in 180ms ease-out;
+}
+
+.game-over-popup {
+  background: linear-gradient(180deg, var(--bg-raised), var(--bg));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  min-width: 260px;
+  max-width: 80%;
+  animation: pop-in 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.game-over-popup h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold-strong);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.game-over-popup p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Piece learning guide panel ─────────────────────────── */
+
+.piece-guide {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.piece-guide-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+  margin-bottom: 2px;
+}
+
+.piece-guide-hint {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+}
+
+.piece-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.piece-button {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--text);
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.piece-button:hover {
+  background: var(--bg-hover);
+  border-color: var(--gold-soft);
+  transform: translateY(-1px);
+}
+
+.piece-button.is-active {
+  background: linear-gradient(180deg, var(--gold-strong), var(--gold));
+  color: #1a1206;
+  border-color: var(--gold-strong);
+}
+
+.piece-glyph {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.piece-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.piece-detail {
+  margin-top: 14px;
+  background: linear-gradient(180deg, rgba(212,175,55,0.06), transparent 60%), var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.piece-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.piece-detail-glyph {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--gold-strong);
+}
+
+.piece-detail-header h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  flex: 1;
+}
+
+.piece-detail-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.piece-detail-close:hover {
+  background: var(--crimson);
+  border-color: var(--crimson);
+  color: #fff;
+}
+
+/* ── Move diagram (mini chessboard) ─────────────────────── */
+
+.move-diagram {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid rgba(212, 175, 55, 0.35);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.diagram-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diagram-square.is-light { background: var(--sq-light); }
+.diagram-square.is-dark  { background: var(--sq-dark); }
+
+/* Green dot -- legal non-capture move */
+.diagram-square.has-move::before {
+  content: '';
+  position: absolute;
+  inset: 35%;
+  background: rgba(40, 120, 40, 0.75);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(40, 120, 40, 0.45);
+  pointer-events: none;
+}
+
+/* Red ring around capture squares */
+.diagram-square.has-capture::after {
+  content: '';
+  position: absolute;
+  inset: 6%;
+  border: 3px solid rgba(210, 68, 63, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(210, 68, 63, 0.35);
+  pointer-events: none;
+}
+
+.diagram-piece {
+  font-size: 1.9rem;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.diagram-piece-white {
+  color: #fff;
+  text-shadow:
+    0 0 1px #000, 1px 0 0 #000, -1px 0 0 #000,
+    0 1px 0 #000, 0 -1px 0 #000,
+    1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+.diagram-piece-black {
+  color: #1a1206;
+}
+
+@media (max-width: 360px) {
+  .diagram-piece { font-size: 1.3rem; }
+}

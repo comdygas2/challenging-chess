@@ -1,0 +1,87 @@
+/*
+  Base page styles: dark navy theme with warm accents.
+  Tokens defined here; component-specific styles in App.css.
+*/
+
+:root {
+  /* Surfaces */
+  --bg-deep: #070c16;
+  --bg: #0b1424;
+  --bg-raised: #131f35;
+  --bg-elevated: #1a2a47;
+  --bg-hover: #223456;
+
+  /* Borders & dividers */
+  --border: rgba(220, 205, 160, 0.12);
+  --border-strong: rgba(220, 205, 160, 0.22);
+
+  /* Text */
+  --text: #ece3c9;
+  --text-muted: rgba(236, 227, 201, 0.62);
+  --text-dim: rgba(236, 227, 201, 0.38);
+
+  /* Accents */
+  --gold: #d4af37;
+  --gold-strong: #eac461;
+  --gold-soft: rgba(212, 175, 55, 0.18);
+  --emerald: #3aa272;
+  --crimson: #d2443f;
+  --amber: #e0a33b;
+
+  /* Board colors */
+  --sq-light: #e9d7b0;
+  --sq-dark: #7a5432;
+
+  /* Radii + shadows */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.55);
+
+  /* Fonts */
+  --font-display: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  font: 16px/1.5 var(--font-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(212, 175, 55, 0.07), transparent 60%),
+    radial-gradient(900px 700px at 110% 10%, rgba(58, 162, 114, 0.05), transparent 60%),
+    var(--bg-deep);
+  color: var(--text);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Focus ring for accessibility -- subtle gold outline. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
