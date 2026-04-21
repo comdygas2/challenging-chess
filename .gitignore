@@ -26,3 +26,4 @@ dist-ssr
 # Local backup / archive files
 Archive.zip
 *.bak
+.vercel
