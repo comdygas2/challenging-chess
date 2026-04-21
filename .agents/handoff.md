@@ -3,9 +3,19 @@
 _Last updated: 2026-04-21_
 
 ## Current state
-`main` is at `4561dc0`. Live site at https://challenging-chess.vercel.app/ matches `main` (verified via `curl` — title = `'Maizing Challenging Chess`, HTTP 200).
+`main` is at `daef39e`. Live site at https://challenging-chess.vercel.app/ matches `main` (HTTP 200; title `'Maizing Challenging Chess`; bundled JS contains the new emoji characters).
 
 ## What just changed (this session)
+
+### Difficulty selector → emoji faces (`daef39e`)
+- Replaced the four text-only pill cards with emoji-forward cards: 🤪 Easy / 🙂 Medium / 🧐 Hard / 🧠 Extreme.
+- Removed per-level `description` field from `src/lib/difficulties.js`.
+- Card grid switched from `flex` to `grid-template-columns: repeat(4, 1fr)` with `min-width: 0` on the cards so they shrink below intrinsic content size on narrow phones — all four stay on one row at 320px (iPhone SE).
+- Two new mobile breakpoints at 520px and 360px step the emoji and label sizes down. Desktop emoji 2.6rem, 375px phone 2rem, 320px phone 1.75rem.
+- Extreme stays locked-until-you-beat-Hard. Locked state: grayscale+dim on the emoji, a `🔒` badge in the corner, `disabled` button. Logic unchanged (`UNLOCK_AFTER_BEATING = 'hard'`, localStorage key `cc.unlocks.v1`).
+- Verified via Playwright at 1280 / 375 / 320px: all four cards on one row, no wrapping, no console errors, click-to-select still works.
+
+### Earlier in session (still live)
 1. **Fixed the stale live-site problem.** The GitHub auto-deploy for commit `ac2d59c` (the rename-title commit) was stuck in `Blocked` status on Vercel (Hobby-tier policy). I bypassed the GitHub integration by deploying directly via CLI:
    - `npx vercel login` (GitHub device flow, authorized by user)
    - `npx vercel link --project challenging-chess --yes` (linked local folder → `comdygas-projects/challenging-chess`, auto-added `.vercel` to `.gitignore`)
