@@ -6,7 +6,7 @@ function App() {
   return (
     <main className="app">
       <header className="app-header">
-        <h1>Challenging chess!!!</h1>
+        <h1>'Maizing Challenging Chess</h1>
         <p className="tagline">A simple chess app you play against the computer.</p>
       </header>
 
