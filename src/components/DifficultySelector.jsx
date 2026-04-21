@@ -3,8 +3,9 @@ import { DIFFICULTIES, DIFFICULTY_ORDER } from '../lib/difficulties'
 /*
   DifficultySelector
   ------------------
-  Four pill-shaped cards. Clicking one picks that difficulty.
-  The "Extreme Hard" card is locked until the player beats Hard.
+  Four cards across, each showing a big emoji face plus the difficulty
+  name. The "Extreme" card is locked (desaturated + padlock) until the
+  player beats Hard.
 
   Props:
     selected     - id of the currently chosen difficulty
@@ -34,13 +35,21 @@ export default function DifficultySelector({ selected, onSelect, unlockedIds }) 
             role="radio"
             aria-checked={isSelected}
             aria-disabled={locked}
+            aria-label={locked ? `${level.label} (locked — beat Hard to unlock)` : level.label}
             disabled={locked}
             className={classes}
             onClick={() => !locked && onSelect(id)}
+            title={locked ? 'Beat Hard mode to unlock' : level.label}
           >
-            {locked && <span className="lock-pill">Locked</span>}
+            <span className="difficulty-emoji" aria-hidden="true">
+              {level.emoji}
+            </span>
             <span className="difficulty-label">{level.label}</span>
-            <span className="difficulty-description">{level.description}</span>
+            {locked && (
+              <span className="lock-badge" aria-hidden="true">
+                🔒
+              </span>
+            )}
           </button>
         )
       })}

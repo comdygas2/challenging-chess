@@ -12,41 +12,41 @@
 */
 
 export const DIFFICULTIES = {
-  hard: {
-    id: 'hard',
-    label: 'Hard',
-    description: 'Recommended for people who want a challenge.',
-    skill: 16,
-    movetimeMs: 1200,
+  easy: {
+    id: 'easy',
+    label: 'Easy',
+    emoji: '🤪',
+    skill: 3,
+    movetimeMs: 400,
   },
   medium: {
     id: 'medium',
     label: 'Medium',
-    description: 'Not too easy, not too hard!',
+    emoji: '🙂',
     skill: 10,
     movetimeMs: 800,
   },
-  easy: {
-    id: 'easy',
-    label: 'Easy',
-    description: 'Recommended for beginners.',
-    skill: 3,
-    movetimeMs: 400,
+  hard: {
+    id: 'hard',
+    label: 'Hard',
+    emoji: '🧐',
+    skill: 16,
+    movetimeMs: 1200,
   },
   extremeHard: {
     id: 'extremeHard',
-    label: 'Extreme Hard',
-    description: 'Beat Hard mode to unlock.',
+    label: 'Extreme',
+    emoji: '🧠',
     skill: 20,
     movetimeMs: 2500,
     requiresUnlock: true,
   },
 }
 
-// Order shown on screen (matches the drawing: Hard, Medium, Easy, Extreme Hard).
-export const DIFFICULTY_ORDER = ['hard', 'medium', 'easy', 'extremeHard']
+// Order shown on screen, left to right: Easy → Medium → Hard → Extreme (locked).
+export const DIFFICULTY_ORDER = ['easy', 'medium', 'hard', 'extremeHard']
 
 export const DEFAULT_DIFFICULTY_ID = 'medium'
 
-// The level that must be beaten to unlock Extreme Hard.
+// The level that must be beaten to unlock Extreme.
 export const UNLOCK_AFTER_BEATING = 'hard'
